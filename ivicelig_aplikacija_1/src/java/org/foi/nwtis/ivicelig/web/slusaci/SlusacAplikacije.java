@@ -19,8 +19,8 @@ import org.foi.nwtis.ivicelig.web.dretve.MeteoDretva;
 public class SlusacAplikacije implements ServletContextListener {
 
     public static ServletContext sc;
-    private KomunikacijskaDretva kd;
-    private MeteoDretva md;
+    public static KomunikacijskaDretva kd;
+    public static MeteoDretva md;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {

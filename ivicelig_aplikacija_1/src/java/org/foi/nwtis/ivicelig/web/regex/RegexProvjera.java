@@ -10,16 +10,16 @@ import java.util.regex.Pattern;
  */
 public class RegexProvjera {
 
-    private String sintaksa = "^([^\\s]+) ([^\\s]+); ([^\\s]+) ([^\\s]+); "
-            + "(PAUZA|KRENI|PASIVNO|AKTIVNO|STANI|STANJE|LISTAJ|DODAJ \"([^\\s]+)\" \"([^\\s]+)\"|"
-            + "GRUPA (DODAJ|PREKID|KRENI|PAUZA|STANJE));";
+    private final String sintaksa = "^([^\\s]+) ([^\\s]+); ([^\\s]+) ([^\\s]+); "
+            + "(PAUZA|KRENI|PASIVNO|AKTIVNO|STANI|STANJE|LISTAJ|(DODAJ) \"([^\\s]+)\" \"([^\\s]+)\"|"
+            + "(GRUPA) (DODAJ|PREKID|KRENI|PAUZA|STANJE));";
 
     public ArrayList<String> dohvatiRegexGrupe(String input) {
         ArrayList<String> array = new ArrayList<>();
         Matcher matcher = obradiRegex(input);
         for (int i = 0; i <= matcher.groupCount(); i++) {
             if (matcher.group(i) != null) {
-                array.add(matcher.group(i).toString());
+                array.add(matcher.group(i));
             }
         }
         return array;

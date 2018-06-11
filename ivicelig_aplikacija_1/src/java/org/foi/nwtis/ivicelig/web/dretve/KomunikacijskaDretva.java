@@ -12,9 +12,9 @@ import java.util.logging.Logger;
  */
 public class KomunikacijskaDretva extends Thread {
 
-    public volatile static boolean krajRada = false;
-    ServerSocket serverSocket;
-    
+    public volatile  boolean krajRada = false;
+    private ServerSocket serverSocket;
+    public  boolean pauza = false;
 
     @Override
     public void interrupt() {

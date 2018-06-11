@@ -17,7 +17,7 @@ import org.foi.nwtis.ivicelig.web.podaci.Parkiraliste;
 public class TablicaParkiraliste extends TablicaAbstraktna {
 
     @Override
-    public  boolean insert(Object t) {
+    public boolean insert(Object t) {
         try (
                 Connection con = getConnection();
                 Statement stmt = con.createStatement();) {
@@ -38,48 +38,52 @@ public class TablicaParkiraliste extends TablicaAbstraktna {
         String naziv = p.getNaziv();
         String adresa = p.getAdresa();
         Lokacija l = p.getGeoloc();
-            
-//         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-//                    String sCertDate = sdf.format(new Date());
+
         String upit = "INSERT INTO parkiralista"
                 + "(naziv,adresa,latitude,longitude)"
                 + "VALUES('" + naziv + "','" + adresa + "',"
                 + l.getLatitude() + "," + l.getLongitude() + ")";
         return upit;
     }
-     public List<Parkiraliste> getAllRecords(){
-        
+
+    @Override
+    public List<Parkiraliste> getAllRecords() {
+
         List<Parkiraliste> parkiralista = new ArrayList<>();
-        
+
         try {
             ResultSet rs = null;
             PreparedStatement pst = null;
             Connection con = getConnection();
 
             String stm = "SELECT * FROM parkiralista";
-            System.out.println(stm);
             
-                pst = con.prepareStatement(stm);
-                pst.execute();
-                rs = pst.getResultSet();
-                
-                while (rs.next()) {
-                    Lokacija l = new Lokacija(rs.getString(4),rs.getString(5));
-                    
-                   Parkiraliste parkiraliste = new Parkiraliste();
-                   parkiraliste.setId(Integer.parseInt(rs.getString(1)));
-                   parkiraliste.setNaziv(rs.getString(2));
-                   parkiraliste.setAdresa(rs.getString(3));
-                   parkiraliste.setGeoloc(l);
-                   parkiralista.add(parkiraliste);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+
+            pst = con.prepareStatement(stm);
+            pst.execute();
+            rs = pst.getResultSet();
+
+            while (rs.next()) {
+                Lokacija l = new Lokacija(rs.getString(4), rs.getString(5));
+
+                Parkiraliste parkiraliste = new Parkiraliste();
+                parkiraliste.setId(Integer.parseInt(rs.getString(1)));
+                parkiraliste.setNaziv(rs.getString(2));
+                parkiraliste.setAdresa(rs.getString(3));
+                parkiraliste.setGeoloc(l);
+                parkiralista.add(parkiraliste);
             }
-        
-        return parkiralista;
-        
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    
+
+        return parkiralista;
+
+    }
+
+    @Override
+    public boolean update(Object t) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }

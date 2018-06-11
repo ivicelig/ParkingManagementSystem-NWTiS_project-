@@ -5,28 +5,36 @@
         <group>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/rest/klijenti/OWMKlijent.java</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/json/Sys.java</file>
-            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/podaci/MeteoPodaci.java</file>
-            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/dretve/KomunikacijskaDretva.java</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/json/Coord.java</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/rest/klijenti/GMKlijent.java</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/regex/RegexProvjera.java</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/dretve/MeteoDretva.java</file>
-            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/baza/TablicaAbstraktna.java</file>
-            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/web/WEB-INF/NWTiS.config.xml</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/web/WEB-INF/faces-config.xml</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/json/Main.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/web/sigurno/index.xhtml</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/baza/TablicaKorisnici.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/baza/TablicaMeteo.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/json/Weather.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/podaci/Korisnik.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/podaci/Lokacija.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/dretve/KomunikacijskaDretva.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/podaci/MeteoPodaci.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/baza/TablicaAbstraktna.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/web/WEB-INF/NWTiS.config.xml</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/slusaci/SlusacAplikacije.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/podaci/Parkiraliste.java</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/rest/klijenti/OWMRESTHelper.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/web/sigurno/nwtis/pregledDnevnika.xhtml</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/baza/TablicaInterface.java</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/web/WEB-INF/web.xml</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/dretve/RadnaDretva.java</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/json/ResponseJSON.java</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/json/Wind.java</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/rest/klijenti/GMRESTHelper.java</file>
-            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/baza/TablicaMeteo.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/web/sigurno/nwtis/pregledKorisnika.xhtml</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/json/Clouds.java</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/baza/TablicaParkiraliste.java</file>
-            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/src/java/org/foi/nwtis/ivicelig/web/json/Weather.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_1/web/sigurno/predlozak.xhtml</file>
         </group>
     </open-files>
 </project-private>

@@ -5,6 +5,9 @@
  */
 package org.foi.nwtis.ivicelig.web.baza;
 
+import java.util.List;
+import org.foi.nwtis.ivicelig.web.podaci.Parkiraliste;
+
 /**
  *
  * @author Ivica
@@ -13,7 +16,8 @@ package org.foi.nwtis.ivicelig.web.baza;
 public interface TablicaInterface<T> {
 
     public boolean insert(T t);
-
+    public boolean update(T t);
+    public List<? extends Object> getAllRecords();
     public String createInsertQuery(T t);
 
 }

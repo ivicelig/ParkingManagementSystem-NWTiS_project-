@@ -12,7 +12,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import org.foi.nwtis.ivicelig.web.json.ResponseJSON;
-import org.foi.nwtis.ivicelig.web.podaci.MeteoPodaci;
+
 
 /**
  *
