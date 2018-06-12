@@ -10,8 +10,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import org.foi.nwtis.ivicelig.web.podaci.Korisnik;
+import org.foi.nwtis.ivicelig.web.podaci.Lokacija;
+import org.foi.nwtis.ivicelig.web.podaci.Parkiraliste;
 
 /**
  *
@@ -54,7 +57,36 @@ public class TablicaKorisnici extends TablicaAbstraktna {
 
     @Override
     public List<Korisnik> getAllRecords() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        List<Korisnik> korisnici = new ArrayList<>();
+
+        try {
+            ResultSet rs = null;
+            PreparedStatement pst = null;
+            Connection con = getConnection();
+
+            String stm = "SELECT * FROM korisnici";
+            
+
+            pst = con.prepareStatement(stm);
+            pst.execute();
+            rs = pst.getResultSet();
+
+            while (rs.next()) {
+                
+
+                Korisnik korisnik = new Korisnik();
+                korisnik.setKorIme(rs.getString(1));
+                korisnik.setIme(rs.getString(3));
+                korisnik.setPrezime(rs.getString(4));
+                korisnici.add(korisnik);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return korisnici;
+
     }
 
     public Korisnik getByID(String korIme) {

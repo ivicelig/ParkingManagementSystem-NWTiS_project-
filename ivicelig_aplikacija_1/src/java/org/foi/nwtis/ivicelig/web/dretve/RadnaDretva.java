@@ -12,11 +12,15 @@ import org.foi.nwtis.ivicelig.web.baza.TablicaKorisnici;
 import org.foi.nwtis.ivicelig.web.podaci.Korisnik;
 import org.foi.nwtis.ivicelig.web.regex.RegexProvjera;
 import org.foi.nwtis.ivicelig.web.slusaci.SlusacAplikacije;
+import org.foi.nwtis.ivicelig.ws.klijenti.StatusKorisnika;
+import java.util.List;
 
 class RadnaDretva extends Thread {
 
     private Socket socket;
     private Konfiguracija konfig;
+    private String korime;
+    private String lozinka;
 
     public RadnaDretva(Socket socket) {
         this.socket = socket;
@@ -52,7 +56,7 @@ class RadnaDretva extends Thread {
                         if (!(dodavanje)) {
                             if (provjeriKorisnickoImeIlozinku(komanda.get(2), komanda.get(4))) {
 
-                                doAction(komanda);
+                                doAction(komanda, os);
 
                             } else {
                                 //Korisničko ime i lozinka ne odgovoaraju
@@ -105,14 +109,14 @@ class RadnaDretva extends Thread {
         return false;
     }
 
-    private void doAction(ArrayList<String> komanda) {
+    private void doAction(ArrayList<String> komanda, OutputStream os) {
         final KomunikacijskaDretva kd = SlusacAplikacije.kd;
         final MeteoDretva md = SlusacAplikacije.md;
-        
+
         switch (komanda.get(5)) {
             case "PAUZA":
 
-                  if (kd.pauza) {
+                if (kd.pauza) {
                     System.out.println("ERR 12;");
                 } else {
                     kd.pauza = true;
@@ -128,8 +132,8 @@ class RadnaDretva extends Thread {
                 }
                 break;
             case "PASIVNO":
-        
-               if (md.pasivno) {
+
+                if (md.pasivno) {
                     System.out.println("ERR 14;");
                 } else {
                     md.pasivno = true;
@@ -146,12 +150,43 @@ class RadnaDretva extends Thread {
                 break;
             case "STANI":
                 md.radi = false;
-                 kd.interrupt();
+                kd.interrupt();
                 break;
             case "STANJE":
-                
+                if(md.radi && !kd.pauza){
+                    pisiUOutputStream(os, "OK 11;");
+                }
+                if(!md.radi && !kd.pauza){
+                    pisiUOutputStream(os, "OK 12;");
+                }
+                if(md.radi && kd.pauza){
+                    pisiUOutputStream(os, "OK 13;");
+                }
+                if(!md.radi && kd.pauza){
+                    pisiUOutputStream(os, "OK 14;");
+                }
+
                 break;
             case "LISTAJ":
+                TablicaKorisnici tk = new TablicaKorisnici();
+                List<Korisnik> korisnici = tk.getAllRecords();
+                if(korisnici.isEmpty()){
+                     pisiUOutputStream(os, "ERR 17;");
+                }
+                else{
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("OK 10; [");
+                    for (int i = 0; i < korisnici.size(); i++) {
+                        if(i==(korisnici.size()-1)){
+                            sb.append("{\"ki\":"+korisnici.get(i).getKorIme()+", \"prezime\":"+korisnici.get(i).getPrezime()+", \"ime\":"+korisnici.get(i).getIme()+"}");
+                         break;   
+                        }
+                         sb.append("{\"ki\":"+korisnici.get(i).getKorIme()+", \"prezime\":"+korisnici.get(i).getPrezime()+", \"ime\":"+korisnici.get(i).getIme()+"},");
+                    }
+                    sb.append("];");
+                    pisiUOutputStream(os, sb.toString());
+                }
+                
                 break;
 
             default:
@@ -159,8 +194,13 @@ class RadnaDretva extends Thread {
                 if (!kd.pauza) {
                     switch (komanda.get(7)) {
                         case "DODAJ":
-
-                            System.out.println("GRUPA DODAJ");
+                            
+                            if (registrirajGrupu(korime, lozinka)) {
+                                System.out.println("TU SMO!");
+                                pisiUOutputStream(os, "OK 20;");
+                            } else {
+                                pisiUOutputStream(os, "ERROR 21;");
+                            }
                             break;
                         case "PREKID":
                             break;
@@ -181,12 +221,15 @@ class RadnaDretva extends Thread {
                 }
                 break;
         }
+
     }
 
     @Override
     public synchronized void start() {
         super.start();
         konfig = (Konfiguracija) SlusacAplikacije.sc.getAttribute("Konfiguracija");
+        korime = konfig.dajPostavku("korIme");
+        lozinka = konfig.dajPostavku("lozinka");
     }
 
     private boolean provjeriKorisnickoImeIlozinku(String korime, String lozinka) {
@@ -200,6 +243,28 @@ class RadnaDretva extends Thread {
         TablicaKorisnici tk = new TablicaKorisnici();
         Korisnik k = tk.getByID(korime);
         return k != null;
+    }
+
+    private static Boolean registrirajGrupu(java.lang.String korisnickoIme, java.lang.String korisnickaLozinka) {
+        org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service service = new org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service();
+        org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje port = service.getParkiranjePort();
+        return port.registrirajGrupu(korisnickoIme, korisnickaLozinka);
+    }
+    
+    private static StatusKorisnika dajStatusGrupe(java.lang.String korisnickoIme, java.lang.String korisnickaLozinka) {
+        org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service service = new org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service();
+        org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje port = service.getParkiranjePort();
+        return port.dajStatusGrupe(korisnickoIme, korisnickaLozinka);
+    }
+    private void pisiUOutputStream(OutputStream os, String poruka) {
+        try {
+            os.write(poruka.getBytes());
+            os.flush();
+
+        } catch (IOException ex) {
+            Logger.getLogger(RadnaDretva.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
 }

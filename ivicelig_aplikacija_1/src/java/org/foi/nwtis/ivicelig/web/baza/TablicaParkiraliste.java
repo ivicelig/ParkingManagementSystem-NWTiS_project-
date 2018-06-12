@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.foi.nwtis.ivicelig.web.podaci.Korisnik;
 import org.foi.nwtis.ivicelig.web.podaci.Lokacija;
 import org.foi.nwtis.ivicelig.web.podaci.Parkiraliste;
 
@@ -84,6 +85,37 @@ public class TablicaParkiraliste extends TablicaAbstraktna {
     @Override
     public boolean update(Object t) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+     public Parkiraliste getByID(int id) {
+        Parkiraliste parkiraliste = new Parkiraliste();
+
+        try {
+            ResultSet rs;
+            PreparedStatement pst;
+            Connection con = getConnection();
+
+            String stm = "SELECT * FROM parkiralista WHERE id=" + id ;
+            System.out.println(stm);
+
+            pst = con.prepareStatement(stm);
+            pst.execute();
+            rs = pst.getResultSet();
+            if (rs.next() == false) {
+                parkiraliste = null;
+            } else {
+                Lokacija l = new Lokacija();
+                parkiraliste.setId(Integer.parseInt(rs.getString(1)));
+                parkiraliste.setAdresa(rs.getString(2));
+                l.setLatitude(rs.getString(4));
+                l.setLongitude(rs.getString(5));
+                parkiraliste.setGeoloc(l);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return parkiraliste;
     }
 
 }

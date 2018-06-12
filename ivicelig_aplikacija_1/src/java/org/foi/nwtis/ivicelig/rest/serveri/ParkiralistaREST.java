@@ -5,6 +5,7 @@
  */
 package org.foi.nwtis.ivicelig.rest.serveri;
 
+import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -13,6 +14,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
+import org.foi.nwtis.ivicelig.ws.klijenti.Parkiraliste;
 
 /**
  * REST Web Service
@@ -39,8 +41,16 @@ public class ParkiralistaREST {
     @Produces(MediaType.APPLICATION_JSON)
     public String getJson() {
         //TODO return proper representation object
-         return "{\"odgovor\": [], "
+        
+            
+
+        
+        java.util.List<org.foi.nwtis.ivicelig.ws.klijenti.Parkiraliste> park;
+        park = dajSvaParkiralistaGrupe("ivicelig", "656989");
+        
+         return "{\"odgovor\": [{\"adresa\": "+park.get(0).getAdresa()+"}], "
                     + "\"status\": \"ERROR: 2" + "\"}";
+         
     }
 
     /**
@@ -50,5 +60,11 @@ public class ParkiralistaREST {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void putJson(String content) {
+    }
+
+    private static java.util.List<org.foi.nwtis.ivicelig.ws.klijenti.Parkiraliste> dajSvaParkiralistaGrupe(java.lang.String korisnickoIme, java.lang.String korisnickaLozinka) {
+        org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service service = new org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service();
+        org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje port = service.getParkiranjePort();
+        return port.dajSvaParkiralistaGrupe(korisnickoIme, korisnickaLozinka);
     }
 }

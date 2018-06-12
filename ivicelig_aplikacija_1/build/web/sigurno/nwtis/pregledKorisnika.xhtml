@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
     <head>
 
         <title>Pregled parkirališta i prognoza vremena</title>
@@ -20,93 +21,32 @@
             <ui:define name="content">
 
                 <h:form>
-                    <h:outputLabel class="formLabel" for="id" value="Id"/>
-                    <h:inputText class="formInput" id="id" value="#{pregled.id}"/>
-                    <h:commandButton class="formButton" id ="dodaj" value="Dodaj" action="#{pregled.dodajParkiraliste()}">
-                        <f:ajax execute="id naziv adresa" render="parkiralista poruka id naziv adresa" />
-                    </h:commandButton><br/>
-                    <h:outputLabel class="formLabel" for="naziv" value="Naziv"/>
-                    <h:inputText class="formInput" id="naziv" value="#{pregled.naziv}"/><br/>
-                    <h:outputLabel class="formLabel" for="adresa" value="Adresa"/>
-                    <h:inputText class="formInput" id="adresa" value="#{pregled.adresa}"/>
-                    <h:panelGroup id="wrapper">
-                        <h:commandButton class="formButton" id="upisi" value="Upisi" rendered ="#{pregled.prikaziUpisi}"  action="#{pregled.azurirajParkiraliste()}">
-                            <f:ajax execute="id naziv adresa" render="parkiralista poruka wrapper id naziv adresa" />
-                        </h:commandButton>
-                    </h:panelGroup>
-                    <br/>
-                    <h:outputLabel id="poruka"  value="#{pregled.poruka}"/>
+                    <p:dataTable var="k" value="#{korisnici.korisnici}" rows="10"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+                        <p:column headerText="Korisničko ime:">
+                            <h:outputText value="#{k.korIme}" />
+                        </p:column>
 
-                    <br/>
+                        <p:column headerText="Ime">
+                            <h:outputText value="#{k.ime}" />
+                        </p:column>
 
-                    <h:selectManyListbox class = "selectManyListBox" id="parkiralista" value="#{pregled.odabranaParkiralista}" >
-                        <f:ajax event="valueChange" execute="@this" render="" />
-                        <f:selectItems value="#{pregled.popisParkiralista}"
-                                       var="p"
-                                       itemLabel="#{p.adresa.concat('; ').concat(p.naziv).concat('; ').concat(p.id.toString())}"
-                                       itemValue="#{p}"/>
-                    </h:selectManyListbox>
+                        <p:column headerText="Prezime">
+                            <h:outputText value="#{k.prezime}" />
+                        </p:column>
 
-                    <h:commandButton class="formButton" value="Ažuriraj" action="#{pregled.postaviPodatkeZaAzuiranje()}">
-                        <f:ajax execute="" render="id naziv adresa wrapper" />
-                    </h:commandButton>
-                    <h:commandButton class = "formButton" value="Preuzmi parkirališta/e" action="#{pregled.dodajUOdabranaParkiralista()}">
-                        <f:ajax execute="" render="odabranaParkiralista parkiralista" />
-                    </h:commandButton>
+                    
 
-                    <h:commandButton class = "formButton" value="Vrati">
-                        <f:ajax execute="odabranaParkiralista" render="odabranaParkiralista parkiralista" />
-                    </h:commandButton>
+                        <f:facet name="paginatorTopLeft">
+                            <p:commandButton type="button" icon="fa fa-sync" />
+                        </f:facet>
 
-
-                    <div class="selectManyListBox">
-                        <h:selectManyListbox class = "selectManyListBox" id="odabranaParkiralista" value="#{pregled.parkiralistaZaVratiti}" >
-                            <f:selectItems value="#{pregled.popisOdabranihParkiralista}"
-                                           var="d"
-                                           itemLabel="#{d.adresa.concat('; ').concat(d.naziv).concat('; ').concat(d.id.toString())}"
-                                           itemValue="#{d}"/>
-                        </h:selectManyListbox>
-                        <h:commandButton id = "prikazPrognoza" class = "formButton" value="#{pregled.dataTableValue}" action="#{pregled.changeBoolean()}">
-                            <f:ajax execute="" render="wrapperDataTable prikazPrognoza" />
-                        </h:commandButton>
-                       <h:panelGroup id="wrapperDataTable">
-                           
-                        <h:dataTable class="table table-striped table-bordered" value="#{pregled.mpodaci}" var="d"
-
-                                     id = "prognoze" rendered="#{pregled.prikaziDataTable}">
-                            <h:column><f:facet name="header">ID</f:facet>
-                                    #{d.id}
-                            </h:column>
-                            <h:column><f:facet name="header">ID</f:facet>
-                                    #{d.adresa}
-                            </h:column>
-                            <h:column><f:facet name="header">Sat</f:facet>
-                                    #{d.sat}
-                            </h:column>
-                            <h:column><f:facet name="header">Naziv oblaka</f:facet>
-                                    #{d.prognoza.cloudsName}
-                            </h:column>
-                            <h:column><f:facet name="header">Tlak zraka</f:facet>
-                                    #{d.prognoza.pressureValue.toString().concat(" pH")}
-                            </h:column>
-                            <h:column><f:facet name="header">Temperatura(Max)</f:facet>
-                                    #{d.prognoza.temperatureMax.toString().concat(" °C")}
-                            </h:column>
-                            <h:column><f:facet name="header">Temperatura(Min)</f:facet>
-                                    #{d.prognoza.temperatureMin.toString().concat(" °C")}
-                            </h:column>
-                            <h:column><f:facet name="header">Smjer vjetra)</f:facet>
-                                    #{d.prognoza.windDirectionValue.toString()}
-                            </h:column>
-                            <h:column><f:facet name="header">Brzina vjetra</f:facet>
-                                    #{d.prognoza.windSpeedValue.toString()}
-                            </h:column>
-                            
-
-                        </h:dataTable>
-                       </h:panelGroup>
-                    </div>
-
+                        <f:facet name="paginatorBottomRight">
+                            <p:commandButton type="button" icon="fa fa-cloud-upload" />
+                        </f:facet>
+                    </p:dataTable>
                 </h:form>
             </ui:define>
 

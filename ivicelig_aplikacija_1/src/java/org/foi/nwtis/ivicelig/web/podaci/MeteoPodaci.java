@@ -5,6 +5,7 @@
  */
 package org.foi.nwtis.ivicelig.web.podaci;
 
+import java.util.Date;
 import org.foi.nwtis.ivicelig.web.json.ResponseJSON;
 
 /**
@@ -14,10 +15,22 @@ import org.foi.nwtis.ivicelig.web.json.ResponseJSON;
 public class MeteoPodaci {
     private ResponseJSON rj;
     private int id;
+    private Date preuzeto;
+
+    public Date getPreuzeto() {
+        return preuzeto;
+    }
+
+    public void setPreuzeto(Date preuzeto) {
+        this.preuzeto = preuzeto;
+    }
 
     public MeteoPodaci(ResponseJSON rj, int id) {
         this.rj = rj;
         this.id = id;
+    }
+    public MeteoPodaci(){
+        
     }
 
     public ResponseJSON getRj() {

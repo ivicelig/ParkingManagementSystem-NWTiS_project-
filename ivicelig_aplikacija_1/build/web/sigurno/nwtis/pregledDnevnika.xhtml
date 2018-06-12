@@ -5,7 +5,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
 
-      >
+          
+      xmlns:p="http://primefaces.org/ui">
     <head>
 
         <title>
@@ -22,75 +23,35 @@
             </ui:define>
 
             <ui:define name="content">
-                <br/>
-                <h:form>
+                 <h:form>
+                    <p:dataTable var="k" value="#{korisnici.korisnici}" rows="10"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+                        <p:column headerText="Korisničko ime:">
+                            <h:outputText value="#{k.korIme}" />
+                        </p:column>
 
+                        <p:column headerText="Ime">
+                            <h:outputText value="#{k.ime}" />
+                        </p:column>
 
+                        <p:column headerText="Prezime">
+                            <h:outputText value="#{k.prezime}" />
+                        </p:column>
 
-                    <div class="input-group col-md-5">
-                        <h:outputLabel class="col-md-2 control-label" for="ipadresa" value="IP adresa"/>
-                        <h:inputText class="form-control" id="ipadresa" value="#{pregledDnevnika.ipAdresa}"/>
-                    </div>
-                    <div class="form-group">
+                    
 
+                        <f:facet name="paginatorTopLeft">
+                            <p:commandButton type="button" icon="fa fa-sync" />
+                        </f:facet>
 
-                        <div class="input-group date form_datetime col-md-5" data-date="2018-01-01T00:00:00Z" data-link-field="dtp_input1">
-                            <h:outputLabel for="od" class="col-md-2 control-label" value = "Od"/>
-                            <h:inputText class="form-control" id="od"   value="#{pregledDnevnika.od}" />
-
-                            <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                        </div>
-                        <input type="hidden" id="dtp_input1" value="" /><br/>
-                    </div>
-                    <div class="form-group">
-
-                        <div class="input-group date form_datetime col-md-5" data-date="2018-01-01T00:00:00Z"  data-link-field="dtp_input1">
-                            <h:outputLabel for="do" class="col-md-2 control-label" value = "Do"/>
-                            <h:inputText class="form-control" id="do" size="16"  value="#{pregledDnevnika.do}" />
-
-                            <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-                        </div>
-                        <input type="hidden" id="dtp_input1" value="" /><br/>
-                    </div>
-                    <div class="input-group col-md-5">
-                        <h:outputLabel class="col-md-2 control-label" for="adresa" value="Adresa zahtjeva"/>
-                        <h:inputText class="form-control" id="adresa" value="#{pregledDnevnika.adresa}"/>
-                    </div>
-
-                    <div class="input-group col-md-5">
-                        <h:outputLabel class="col-md-2 control-label" for="trajanje" value="Trajanje"/>
-                        <h:inputText class="form-control" id="trajanje" value="#{pregledDnevnika.trajanje}"/>
-                    </div>
-
-                    <h:commandButton class="formButton" value="Preuzmi" action="#{pregledDnevnika.preuzmiPodatke()}">
-                        <f:ajax execute="ipadresa od do adresa trajanje" render="dnevnik" />
-                    </h:commandButton>
-
-                    <h:dataTable value="#{pregledDnevnika.zapisi}" var="d"
-                                 class="table table-striped table-bordered"
-                                 id = "dnevnik">
-                        <h:column><f:facet name="header">IP adresa</f:facet>
-                                #{d.ipadresa}
-                        </h:column>
-                        <h:column><f:facet name="header">Korisnik</f:facet>
-                                #{d.korisnik}
-                        </h:column>
-                        <h:column><f:facet name="header">Status</f:facet>
-                                #{d.status}
-                        </h:column>
-                        <h:column><f:facet name="header">Trajanje</f:facet>
-                                #{d.trajanje}
-                        </h:column>
-                        <h:column><f:facet name="header">URL</f:facet>
-                                #{d.url}
-                        </h:column>
-                        <h:column><f:facet name="header">Vrijeme</f:facet>
-                                #{d.vrijeme}
-                        </h:column>
-
-
-                    </h:dataTable>
+                        <f:facet name="paginatorBottomRight">
+                            <p:commandButton type="button" icon="fa fa-cloud-upload" />
+                        </f:facet>
+                    </p:dataTable>
                 </h:form>
+               
             </ui:define>
 
         </ui:composition>

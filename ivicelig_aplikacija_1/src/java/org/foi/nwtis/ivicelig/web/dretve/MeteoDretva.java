@@ -12,13 +12,14 @@ import org.foi.nwtis.ivicelig.web.json.ResponseJSON;
 import org.foi.nwtis.ivicelig.web.podaci.MeteoPodaci;
 import org.foi.nwtis.ivicelig.web.podaci.Parkiraliste;
 import org.foi.nwtis.ivicelig.web.slusaci.SlusacAplikacije;
+import org.foi.nwtis.ivicelig.ws.klijenti.StatusKorisnika;
 
 /**
  *
  * @author Ivica
  */
 public class MeteoDretva extends Thread {
-
+    
     Konfiguracija konfiguracija;
     public  boolean radi = true;
     public  boolean pasivno = false;
@@ -62,5 +63,7 @@ public class MeteoDretva extends Thread {
         super.start();
         konfiguracija = (Konfiguracija) SlusacAplikacije.sc.getAttribute("Konfiguracija");
     }
+
+    
 
 }
