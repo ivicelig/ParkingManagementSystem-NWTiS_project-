@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./predlozak.xhtml">
+
+            <ui:define name="content">
+                <div>
+                    <h:form>
+                        <h:outputLabel for="username" value="Korisničko ime" />
+                        <h:inputText id="username" value="#{registracija.korime}"/>
+                        <br />
+                        <h:outputLabel for="password" value="Lozinka" />
+                        <h:inputSecret id="password" value="#{registracija.lozinka}"/>
+                        <br />
+                        <h:outputLabel for="password1" value="Ponovljena lozinka" />
+                        <h:inputSecret id="password1" value="#{registracija.ponovljenaLozinka}"/>
+                        <br />
+                        <h:outputLabel for="name" value="Ime" />
+                        <h:inputText id="name" value="#{registracija.ime}"/>
+                        <br />
+                        <h:outputLabel for="surname" value="prezime" />
+                        <h:inputText id="surname" value="#{registracija.prezime}"/>
+                        <br />
+                        <h:commandButton value="Registracija" type="submmit" action="#{registracija.registracija()}" />
+                    </h:form>
+                    <h:outputLabel id="poruka"  value="#{registracija.poruka}"/>
+
+                    <br/>
+                </div>
+                <div>
+                    <h:form>
+                        <h:outputLabel for="username1" value="Korisničko ime" />
+                        <h:inputText id="username1" value="#{registracija.korimeAzuiranje}"/>
+                        <br />
+                        <h:outputLabel for="password2" value="Lozinka" />
+                        <h:inputText id="password2" value="#{registracija.lozinkaAzuiranje}"/>
+                        <br />
+                        
+                        <h:outputLabel for="name2" value="Ime" />
+                        <h:inputText id="name2" value="#{registracija.imeAzuiranje}"/>
+                        <br />
+                        <h:outputLabel for="surname2" value="prezime" />
+                        <h:inputText id="surname2" value="#{registracija.prezimeAzuiranje}"/>
+                        <br />
+                        <h:commandButton value="Azuiranje" type="submmit" action="#{registracija.azuiranje()}" />
+                    </h:form>
+                    <h:outputLabel id="poruka1"  value="#{registracija.poruka1}"/>
+
+                    <br/>
+                </div>
+                <div>
+                 <h:form>
+                     <p:dataTable var="k" value="#{registracija.korisnici}" rows="#{registracija.brojStranica}"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+                        <p:column headerText="Korisničko ime:">
+                            <h:outputText value="#{k.kime}" />
+                        </p:column>
+
+                        <p:column headerText="Ime">
+                            <h:outputText value="#{k.ime}" />
+                        </p:column>
+
+                        <p:column headerText="Prezime">
+                            <h:outputText value="#{k.prezime}" />
+                        </p:column>
+
+                    
+
+                        <f:facet name="paginatorTopLeft">
+                            <p:commandButton type="button" icon="fa fa-sync" />
+                        </f:facet>
+
+                        <f:facet name="paginatorBottomRight">
+                            <p:commandButton type="button" icon="fa fa-cloud-upload" />
+                        </f:facet>
+                    </p:dataTable>
+                 </h:form>
+                </div>
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

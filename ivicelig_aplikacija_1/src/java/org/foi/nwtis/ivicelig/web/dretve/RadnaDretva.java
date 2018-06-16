@@ -50,22 +50,32 @@ class RadnaDretva extends Thread {
                 if (rp.ulazZadovoljavavaRegex(sb.toString())) {
                     ArrayList<String> komanda = rp.dohvatiRegexGrupe(sb.toString());
                     boolean dodavanje = komandaDodavanjeKorisnika(komanda);
-
+                    boolean azuriranje = komandaAzuiranje(komanda);
                     if (provjeriDaliKorisnikPostoji(komanda.get(2))) {
 
                         if (!(dodavanje)) {
-                            if (provjeriKorisnickoImeIlozinku(komanda.get(2), komanda.get(4))) {
+                            if (!azuriranje) {
+                                if (provjeriKorisnickoImeIlozinku(komanda.get(2), komanda.get(4))) {
 
-                                doAction(komanda, os);
+                                    doAction(komanda, os);
 
+                                } else {
+                                    //Korisničko ime i lozinka ne odgovoaraju
+
+                                    pisiUOutputStream(os, "ERR 11;");
+                                }
                             } else {
-                                //Korisničko ime i lozinka ne odgovoaraju
-                                System.out.println("ERROR 11;");
+                                //Ako je azuiranje, azuiraj
+                                Korisnik k = new Korisnik(komanda.get(2), komanda.get(4), komanda.get(7), komanda.get(8));
+                                TablicaKorisnici tk = new TablicaKorisnici();
+                                tk.update(k);
+                                pisiUOutputStream(os, "OK 10;");
                             }
                         } else {
                             //Ako je komanda DODAJ korisnika i korisničko ime postoji
-                            System.out.println("ERROR 10;");
+                            pisiUOutputStream(os, "ERR 10;");
                         }
+
                     } else {
                         //Korisnik ne postoji
 
@@ -74,16 +84,31 @@ class RadnaDretva extends Thread {
                             Korisnik k = new Korisnik(komanda.get(2), komanda.get(4), komanda.get(7), komanda.get(8));
                             TablicaKorisnici tk = new TablicaKorisnici();
                             tk.insert(k);
-                            System.out.println("OK 10;");
+
+                            pisiUOutputStream(os, "OK 10;");
 
                         } else {
-                            System.out.println("ERROR 11;");
+                            pisiUOutputStream(os, "ERR 11;");
                         }
                     }
 
                 } else {
-                    System.out.println("KOMANDA NIJE DOBRA!");
-                    //TODO regex ne zadovoljava uvjete
+                    if (rp.ulazZadovoljavavaRegexAutentifikacija(sb.toString())) {
+                        ArrayList<String> komanda = rp.dohvatiRegexGrupeAutentifikacija(sb.toString());
+                        if (provjeriDaliKorisnikPostoji(komanda.get(2))) {
+                            if (provjeriKorisnickoImeIlozinku(komanda.get(2), komanda.get(4))) {
+                                pisiUOutputStream(os, "OK 10;");
+                            } else {
+                                pisiUOutputStream(os, "ERR 11;");
+                            }
+                        } else {
+                            pisiUOutputStream(os, "ERR 11;");
+                        }
+
+                    } else {
+                        pisiUOutputStream(os, "NAREDBA NIJE U ISPRAVNOM OBLIKU!");;
+                        //TODO regex ne zadovoljava nijedan regex
+                    }
                 }
                 long kraj = System.currentTimeMillis();
                 long rad = kraj - pocetak;
@@ -109,84 +134,44 @@ class RadnaDretva extends Thread {
         return false;
     }
 
+    private boolean komandaAzuiranje(ArrayList<String> komanda) {
+        //Test ako je komanda za dodavanje korisnika
+        if (komanda.size() >= 7) {
+            if (komanda.get(6).equals("AZURIRAJ")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void doAction(ArrayList<String> komanda, OutputStream os) {
         final KomunikacijskaDretva kd = SlusacAplikacije.kd;
         final MeteoDretva md = SlusacAplikacije.md;
 
         switch (komanda.get(5)) {
             case "PAUZA":
-
-                if (kd.pauza) {
-                    System.out.println("ERR 12;");
-                } else {
-                    kd.pauza = true;
-                    System.out.println("OK 10;");
-                }
+                staviUstanjePauze(kd, os);
                 break;
             case "KRENI":
-                if (!kd.pauza) {
-                    System.out.println("ERR 13;");
-                } else {
-                    kd.pauza = false;
-                    System.out.println("OK 10;");
-                }
+                staviUStanjeKreni(kd, os);
                 break;
             case "PASIVNO":
-
-                if (md.pasivno) {
-                    System.out.println("ERR 14;");
-                } else {
-                    md.pasivno = true;
-                    System.out.println("OK 10;");
-                }
+                staviUStanjePasivno(md, os);
                 break;
             case "AKTIVNO":
-                if (!md.pasivno) {
-                    System.out.println("ERR 15;");
-                } else {
-                    md.pasivno = false;
-                    System.out.println("OK 10;");
-                }
+                staviUStanjeAktivno(md, os);
                 break;
             case "STANI":
                 md.radi = false;
                 kd.interrupt();
                 break;
             case "STANJE":
-                if(md.radi && !kd.pauza){
-                    pisiUOutputStream(os, "OK 11;");
-                }
-                if(!md.radi && !kd.pauza){
-                    pisiUOutputStream(os, "OK 12;");
-                }
-                if(md.radi && kd.pauza){
-                    pisiUOutputStream(os, "OK 13;");
-                }
-                if(!md.radi && kd.pauza){
-                    pisiUOutputStream(os, "OK 14;");
-                }
-
+                posaljiStanje(md, kd, os);
                 break;
+
             case "LISTAJ":
-                TablicaKorisnici tk = new TablicaKorisnici();
-                List<Korisnik> korisnici = tk.getAllRecords();
-                if(korisnici.isEmpty()){
-                     pisiUOutputStream(os, "ERR 17;");
-                }
-                else{
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("OK 10; [");
-                    for (int i = 0; i < korisnici.size(); i++) {
-                        if(i==(korisnici.size()-1)){
-                            sb.append("{\"ki\":"+korisnici.get(i).getKorIme()+", \"prezime\":"+korisnici.get(i).getPrezime()+", \"ime\":"+korisnici.get(i).getIme()+"}");
-                         break;   
-                        }
-                         sb.append("{\"ki\":"+korisnici.get(i).getKorIme()+", \"prezime\":"+korisnici.get(i).getPrezime()+", \"ime\":"+korisnici.get(i).getIme()+"},");
-                    }
-                    sb.append("];");
-                    pisiUOutputStream(os, sb.toString());
-                }
-                
+                posaljiKorisnikeIzBaze(os);
+
                 break;
 
             default:
@@ -194,21 +179,20 @@ class RadnaDretva extends Thread {
                 if (!kd.pauza) {
                     switch (komanda.get(7)) {
                         case "DODAJ":
-                            
-                            if (registrirajGrupu(korime, lozinka)) {
-                                System.out.println("TU SMO!");
-                                pisiUOutputStream(os, "OK 20;");
-                            } else {
-                                pisiUOutputStream(os, "ERROR 21;");
-                            }
+                            registrirajGrupu(os);
                             break;
                         case "PREKID":
+                            deregistrirajGrupu(os);
                             break;
                         case "KRENI":
+                            aktivirajGrupu(os);
                             break;
                         case "PAUZA":
+                            blokirajGrupu(os);
                             break;
                         case "STANJE":
+                            dajStanje(os);
+
                             break;
                         default:
 
@@ -222,6 +206,145 @@ class RadnaDretva extends Thread {
                 break;
         }
 
+    }
+
+    private void dajStanje(OutputStream os) {
+        StatusKorisnika sk = dajStatusGrupe(korime, lozinka);
+        if (sk.value().equals(StatusKorisnika.AKTIVAN.toString())) {
+
+            pisiUOutputStream(os, "OK 21; GRUPA JE AKTIVNA;");
+        } else if (sk.value().equals(StatusKorisnika.BLOKIRAN.toString())) {
+            pisiUOutputStream(os, "OK 22; GRUPA JE BLOKIRANA;");
+        } else {
+            pisiUOutputStream(os, "ERR 21;");
+        }
+    }
+
+    private void blokirajGrupu(OutputStream os) {
+        StatusKorisnika sk = dajStatusGrupe(korime, lozinka);
+        if (sk.value().equals(StatusKorisnika.DEREGISTRIRAN.toString())) {
+            pisiUOutputStream(os, "ERR 21; DEREGISTRIRANA JE;");
+        } else if (!sk.value().equals(StatusKorisnika.AKTIVAN.toString())) {
+            pisiUOutputStream(os, "ERR 22; NIJE AKTIVIRANA;");
+        } else {
+            blokirajGrupu(korime, lozinka);
+            pisiUOutputStream(os, "OK 20;");
+        }
+    }
+
+    private void aktivirajGrupu(OutputStream os) {
+        StatusKorisnika sk = dajStatusGrupe(korime, lozinka);
+        if (sk.value().equals(StatusKorisnika.AKTIVAN.toString())) {
+            pisiUOutputStream(os, "ERR 22; AKTIVIRANA JE;");
+        } else if (sk.value().equals(StatusKorisnika.DEREGISTRIRAN.toString())) {
+            pisiUOutputStream(os, "ERR 21; DEREGISTRIRANA JE;");
+        } else {
+            aktivirajGrupu(korime, lozinka);
+            pisiUOutputStream(os, "OK 20;");
+        }
+    }
+
+    private void deregistrirajGrupu(OutputStream os) {
+        StatusKorisnika sk = dajStatusGrupe(korime, lozinka);
+
+        if (!sk.value().equals(StatusKorisnika.DEREGISTRIRAN.toString())) {
+            deregistrirajGrupu(korime, lozinka);
+
+            pisiUOutputStream(os, "OK 20; GRUPA JE DEREGISTRIRANA;");
+        } else {
+            pisiUOutputStream(os, "ERR 21;");
+        }
+    }
+
+    private void registrirajGrupu(OutputStream os) {
+        StatusKorisnika sk = dajStatusGrupe(korime, lozinka);
+
+        if (sk.value().equals(StatusKorisnika.DEREGISTRIRAN.toString())) {
+            registrirajGrupu(korime, lozinka);
+
+            pisiUOutputStream(os, "OK 20; GRUPA JE REGISTRIRANA;");
+        } else {
+            pisiUOutputStream(os, "ERR 20;");
+        }
+    }
+
+    private void staviUStanjeAktivno(final MeteoDretva md, OutputStream os) {
+        if (!md.pasivno) {
+
+            pisiUOutputStream(os, "ERR 15;");
+        } else {
+            md.pasivno = false;
+
+            pisiUOutputStream(os, "OK 10;");
+        }
+    }
+
+    private void staviUStanjePasivno(final MeteoDretva md, OutputStream os) {
+        if (md.pasivno) {
+
+            pisiUOutputStream(os, "ERR 14;");
+        } else {
+            md.pasivno = true;
+
+            pisiUOutputStream(os, "OK 10;");
+        }
+    }
+
+    private void staviUStanjeKreni(final KomunikacijskaDretva kd, OutputStream os) {
+        if (!kd.pauza) {
+            pisiUOutputStream(os, "ERR 13;");
+
+        } else {
+            kd.pauza = false;
+            pisiUOutputStream(os, "OK 10;");
+
+        }
+    }
+
+    private void staviUstanjePauze(final KomunikacijskaDretva kd, OutputStream os) {
+        if (kd.pauza) {
+            pisiUOutputStream(os, "ERR 12;");
+
+        } else {
+            kd.pauza = true;
+            pisiUOutputStream(os, "OK 10;");
+
+        }
+    }
+
+    private void posaljiKorisnikeIzBaze(OutputStream os) {
+        TablicaKorisnici tk = new TablicaKorisnici();
+        List<Korisnik> korisnici = tk.getAllRecords();
+        if (korisnici.isEmpty()) {
+            pisiUOutputStream(os, "ERR 17;");
+        } else {
+            StringBuilder sb = new StringBuilder();
+            sb.append("OK 10; [");
+            for (int i = 0; i < korisnici.size(); i++) {
+                if (i == (korisnici.size() - 1)) {
+                    sb.append("{\"ki\":").append(korisnici.get(i).getKorIme()).append(", \"prezime\":").append(korisnici.get(i).getPrezime()).append(", \"ime\":").append(korisnici.get(i).getIme()).append("}");
+                    break;
+                }
+                sb.append("{\"ki\":").append(korisnici.get(i).getKorIme()).append(", \"prezime\":").append(korisnici.get(i).getPrezime()).append(", \"ime\":").append(korisnici.get(i).getIme()).append("},");
+            }
+            sb.append("];");
+            pisiUOutputStream(os, sb.toString());
+        }
+    }
+
+    private void posaljiStanje(final MeteoDretva md, final KomunikacijskaDretva kd, OutputStream os) {
+        if (!md.pasivno && !kd.pauza) {
+            pisiUOutputStream(os, "OK 11;");
+        }
+        if (md.pasivno && !kd.pauza) {
+            pisiUOutputStream(os, "OK 12;");
+        }
+        if (!md.pasivno && kd.pauza) {
+            pisiUOutputStream(os, "OK 13;");
+        }
+        if (md.pasivno && kd.pauza) {
+            pisiUOutputStream(os, "OK 14;");
+        }
     }
 
     @Override
@@ -250,12 +373,31 @@ class RadnaDretva extends Thread {
         org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje port = service.getParkiranjePort();
         return port.registrirajGrupu(korisnickoIme, korisnickaLozinka);
     }
-    
+
     private static StatusKorisnika dajStatusGrupe(java.lang.String korisnickoIme, java.lang.String korisnickaLozinka) {
         org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service service = new org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service();
         org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje port = service.getParkiranjePort();
         return port.dajStatusGrupe(korisnickoIme, korisnickaLozinka);
     }
+
+    private static Boolean deregistrirajGrupu(java.lang.String korisnickoIme, java.lang.String korisnickaLozinka) {
+        org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service service = new org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service();
+        org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje port = service.getParkiranjePort();
+        return port.deregistrirajGrupu(korisnickoIme, korisnickaLozinka);
+    }
+
+    private static Boolean aktivirajGrupu(java.lang.String korisnickoIme, java.lang.String korisnickaLozinka) {
+        org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service service = new org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service();
+        org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje port = service.getParkiranjePort();
+        return port.aktivirajGrupu(korisnickoIme, korisnickaLozinka);
+    }
+
+    private static Boolean blokirajGrupu(java.lang.String korisnickoIme, java.lang.String korisnickaLozinka) {
+        org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service service = new org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service();
+        org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje port = service.getParkiranjePort();
+        return port.blokirajGrupu(korisnickoIme, korisnickaLozinka);
+    }
+
     private void pisiUOutputStream(OutputStream os, String poruka) {
         try {
             os.write(poruka.getBytes());

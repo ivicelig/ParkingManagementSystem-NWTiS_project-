@@ -3,13 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_2_1/src/java/org/foi/nwtis/ivicelig/ejb/sb/DnevnikFacade.java</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_2_1/src/conf/persistence.xml</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_2_1/src/conf/META-INF/glassfish-resources.xml</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_2_1/src/java/org/foi/nwtis/ivicelig/rest/json/AutentikacijaClass.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_2_1/src/java/org/foi/nwtis/ivicelig/rest/json/OdgovorClass.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_2_1/src/java/org/foi/nwtis/ivicelig/ejb/sb/SingletonSB.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_2_1/src/java/org/foi/nwtis/ivicelig/ejb/sb/DnevnikFacade.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_2_1/src/java/org/foi/nwtis/ivicelig/ejb/sb/KorisnikParkiralisteFacade.java</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_2_1/src/java/org/foi/nwtis/ivicelig/ejb/eb/Dnevnik.java</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_2_1/src/java/org/foi/nwtis/ivicelig/ejb/sb/StatefulSB.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_2_1/src/java/org/foi/nwtis/ivicelig/rest/json/KorisnikClass.java</file>
             <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_2_1/src/java/org/foi/nwtis/ivicelig/ejb/sb/AbstractFacade.java</file>
-            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_2_1/src/java/org/foi/nwtis/ivicelig/ejb/sb/SingletonSB.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_2_1/src/java/org/foi/nwtis/ivicelig/ejb/sb/MqttPorukeFacade.java</file>
+            <file>file:/C:/Users/Ivica/Documents/FOI/FOI%204/NWTiS/ivicelig/nwtis_projekt/ivicelig_aplikacija_2_1/src/java/org/foi/nwtis/ivicelig/rest/json/KorisnikLozinkaClass.java</file>
         </group>
     </open-files>
 </project-private>

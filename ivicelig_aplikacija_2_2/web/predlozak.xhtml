@@ -13,7 +13,7 @@
         
         <h:outputStylesheet name="css/default.css"/>
         <h:outputStylesheet name="css/cssLayout.css"/>
-        <title>NWTiS projekt</title>
+        <title>NWTiS DZ4</title>
     </h:head>
 
     <h:body>
@@ -24,12 +24,15 @@
         <div>
             <div id="left">
 
+                <h:link value="Početna" outcome= "index" />
+                <br/>
+                <h:link value="Registracija" outcome= "registracija" />
+                <br/>
+                <h:link value="Pregled poslužitelja" outcome="pregledPosluzitelj" />
+                <br/>
+                <h:link value="Pregled parkiralista" outcome="pregledParkiralista" />
                 
-                <h:link value="Pregled korisnika" outcome="pregledKorisnika" />
-                <br/>
-                <h:link value="Pregled dnevnika" outcome="pregledDnevnika" />
-                <br/>
-                <h:link></h:link>
+                
 
             </div>
             <div id="content" class="left_content">
@@ -40,7 +43,7 @@
             <ui:insert name="bottom">NWTiS@FOI &copy; 2018.</ui:insert>
         </div>
         
-       
+        
         
 
     </h:body>

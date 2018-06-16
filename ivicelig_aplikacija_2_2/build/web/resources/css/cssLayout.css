@@ -1,0 +1,104 @@
+
+#top {
+    position: relative;
+    background-color: #036fab;
+    color: white;
+    padding: 5px;
+    margin: 0px 0px 10px 0px;
+}
+
+#bottom {
+    position: relative;
+    background-color: #c2dfef;
+    padding: 5px;
+    margin: 10px 0px 0px 0px;
+}
+
+#left {
+    float: left;
+    background-color: #ece3a5;
+    padding: 5px;
+    width: 150px;
+}
+
+#right {
+    float: right;
+    background-color: #ece3a5;
+    padding: 5px;
+    width: 150px;
+}
+
+.center_content {
+    position: relative;
+    background-color: #dddddd;
+    padding: 5px;
+}
+
+.left_content {
+    background-color: #dddddd;
+    padding: 5px;
+    margin-left: 170px;
+}
+
+.right_content {
+    background-color: #dddddd;
+    padding: 5px;
+    margin: 0px 170px 0px 170px;
+}
+
+#top a:link, #top a:visited {
+    color: white;
+    font-weight : bold;
+    text-decoration: none;
+}
+
+#top a:link:hover, #top a:visited:hover  {
+    color: black;
+    font-weight : bold;
+    text-decoration : underline;
+}
+.formButton{
+    margin-right:20px;
+    margin-left:20px;
+    display:inline-block;
+}
+.formLabel{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 5%;
+    display:inline-block;
+}
+.formInput{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100px; 
+    text-align: left;
+    
+}
+.selectManyListBox{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right:20px;
+    margin-left:20px;
+    width: 200px; 
+    height: 300px;
+    display:inline;
+}
+.div{
+     margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right:20px;
+    margin-left:20px;
+    width: 200px; 
+    height: 300px;
+    display:inline;
+}
+select[multiple],
+select[size] {
+  height: 300px ;
+  overflow: auto;
+}
+.col-md-5 {
+    width: 100%;
+  }
+

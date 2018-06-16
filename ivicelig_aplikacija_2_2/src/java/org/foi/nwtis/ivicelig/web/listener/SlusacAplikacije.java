@@ -1,8 +1,15 @@
 package org.foi.nwtis.ivicelig.web.listener;
 
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import org.foi.nwtis.ivicelig.konfiguracije.KonfiguracijaApstraktna;
+import org.foi.nwtis.ivicelig.konfiguracije.KonfiguracijaXML;
+import org.foi.nwtis.ivicelig.konfiguracije.NeispravnaKonfiguracija;
+import org.foi.nwtis.ivicelig.konfiguracije.NemaKonfiguracije;
+import org.foi.nwtis.ivicelig.konfiguracije.bp.BP_Konfiguracija;
 import org.foi.nwtis.ivicelig.web.threads.MQTTdretva;
 
 /*
@@ -10,7 +17,6 @@ import org.foi.nwtis.ivicelig.web.threads.MQTTdretva;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  * Web application lifecycle listener.
  *
@@ -18,14 +24,34 @@ import org.foi.nwtis.ivicelig.web.threads.MQTTdretva;
  */
 public class SlusacAplikacije implements ServletContextListener {
 
+    public static ServletContext sc;
+    public MQTTdretva mqtt;
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-       // MQTTdretva md = new  MQTTdretva();
-        //md.start();
+        sc = sce.getServletContext();
+        try {
+            dohvatiIpostaviKonfiguraciju();
+            // MQTTdretva md = new  MQTTdretva();
+            //md.start();
+        } catch (NemaKonfiguracije | NeispravnaKonfiguracija ex) {
+            Logger.getLogger(SlusacAplikacije.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //mqtt.interrupt();
+    }
+
+    private void dohvatiIpostaviKonfiguraciju() throws NemaKonfiguracije, NeispravnaKonfiguracija {
+        String datoteka = sc.getInitParameter("konfiguracija");
+        String putanja = sc.getRealPath("/WEB-INF") + java.io.File.separator;
+        String puniNazivDatoteke = putanja + datoteka;
+
+        KonfiguracijaApstraktna konfiguracija = new KonfiguracijaXML(puniNazivDatoteke);
+        konfiguracija.ucitajKonfiguraciju();
+
+        sc.setAttribute("Konfiguracija", konfiguracija);
     }
 }

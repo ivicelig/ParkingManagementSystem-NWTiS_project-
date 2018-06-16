@@ -40,7 +40,19 @@ public class TablicaKorisnici extends TablicaAbstraktna {
 
     @Override
     public boolean update(Object t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Korisnik k = (Korisnik) t;
+        try (
+                Connection con = getConnection();
+                Statement stmt = con.createStatement();) {
+            String upit = "UPDATE `korisnici` SET `lozinka`=\""+k.getLozinka()+"\",`ime`=\""+k.getIme()+"\",`prezime`=\""+k.getPrezime()+"\" WHERE kor_ime = \""+k.getKorIme()+"\"";
+            stmt.executeUpdate(upit);
+            stmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.err.println("SQLException: " + ex.getMessage());
+            return false;
+        }
+        return true;
     }
 
     @Override

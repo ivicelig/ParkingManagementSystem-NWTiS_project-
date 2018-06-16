@@ -36,13 +36,14 @@ public class TablicaParkiraliste extends TablicaAbstraktna {
     @Override
     public String createInsertQuery(Object t) {
         Parkiraliste p = (Parkiraliste) t;
+        String id = Integer.toString(p.getId());
         String naziv = p.getNaziv();
         String adresa = p.getAdresa();
         Lokacija l = p.getGeoloc();
 
         String upit = "INSERT INTO parkiralista"
-                + "(naziv,adresa,latitude,longitude)"
-                + "VALUES('" + naziv + "','" + adresa + "',"
+                + "(id,naziv,adresa,latitude,longitude)"
+                + "VALUES(" + id + ",'" + naziv + "','" + adresa + "',"
                 + l.getLatitude() + "," + l.getLongitude() + ")";
         return upit;
     }
@@ -58,7 +59,6 @@ public class TablicaParkiraliste extends TablicaAbstraktna {
             Connection con = getConnection();
 
             String stm = "SELECT * FROM parkiralista";
-            
 
             pst = con.prepareStatement(stm);
             pst.execute();
@@ -84,9 +84,23 @@ public class TablicaParkiraliste extends TablicaAbstraktna {
 
     @Override
     public boolean update(Object t) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        org.foi.nwtis.ivicelig.ws.klijenti.Parkiraliste p = (org.foi.nwtis.ivicelig.ws.klijenti.Parkiraliste) t;
+        try (
+                Connection con = getConnection();
+                Statement stmt = con.createStatement();) {
+            String upit = "UPDATE `parkiralista` SET `naziv`=\""+p.getNaziv()+"\",`adresa`=\""+p.getAdresa()+"\",`latitude`="+p.getGeoloc().getLatitude()+","
+                    + "`longitude`="+p.getGeoloc().getLongitude()+" WHERE id="+p.getId();
+            stmt.executeUpdate(upit);
+            stmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.err.println("SQLException: " + ex.getMessage());
+            return false;
+        }
+        return true;
     }
-     public Parkiraliste getByID(int id) {
+
+    public Parkiraliste getByID(int id) {
         Parkiraliste parkiraliste = new Parkiraliste();
 
         try {
@@ -94,7 +108,7 @@ public class TablicaParkiraliste extends TablicaAbstraktna {
             PreparedStatement pst;
             Connection con = getConnection();
 
-            String stm = "SELECT * FROM parkiralista WHERE id=" + id ;
+            String stm = "SELECT * FROM parkiralista WHERE id=" + id;
             System.out.println(stm);
 
             pst = con.prepareStatement(stm);
@@ -117,5 +131,22 @@ public class TablicaParkiraliste extends TablicaAbstraktna {
 
         return parkiraliste;
     }
+
+    public boolean deleteByID(int id) {
+        try (
+                Connection con = getConnection();
+                Statement stmt = con.createStatement();) {
+            String upit = "DELETE FROM parkiralista WHERE id=" + id;
+            stmt.executeUpdate(upit);
+            stmt.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.err.println("SQLException: " + ex.getMessage());
+            return false;
+        }
+        return true;
+
+    }
+    
 
 }

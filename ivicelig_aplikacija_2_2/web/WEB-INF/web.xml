@@ -4,6 +4,10 @@
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
+    <context-param>
+        <param-name>konfiguracija</param-name>
+        <param-value>NWTiS.config.xml</param-value>
+    </context-param>
     <listener>
         <description>ServletContextListener</description>
         <listener-class>org.foi.nwtis.ivicelig.web.listener.SlusacAplikacije</listener-class>
@@ -17,12 +21,22 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
+    <filter>
+        <filter-name>Filter</filter-name>
+        <filter-class>org.foi.nwtis.ivicelig.web.filter.Filter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>Filter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>pregledPosluzitelj.xhtml</welcome-file>
+        <welcome-file>faces/index.xhtml</welcome-file>
     </welcome-file-list>
+    
 </web-app>
