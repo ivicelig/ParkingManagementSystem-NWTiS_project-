@@ -15,6 +15,7 @@ import org.foi.nwtis.ivicelig.konfiguracije.bp.BP_Konfiguracija;
 import org.foi.nwtis.ivicelig.web.baza.TablicaParkiraliste;
 import org.foi.nwtis.ivicelig.web.dretve.KomunikacijskaDretva;
 import org.foi.nwtis.ivicelig.web.dretve.MeteoDretva;
+import org.foi.nwtis.ivicelig.web.dretve.SinkronizacijskaDretva;
 import org.foi.nwtis.ivicelig.web.podaci.Lokacija;
 import org.foi.nwtis.ivicelig.ws.klijenti.Parkiraliste;
 
@@ -24,6 +25,7 @@ public class SlusacAplikacije implements ServletContextListener {
     public static ServletContext sc;
     public static KomunikacijskaDretva kd;
     public static MeteoDretva md;
+    public static SinkronizacijskaDretva sd;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -33,11 +35,14 @@ public class SlusacAplikacije implements ServletContextListener {
         } catch (NemaKonfiguracije | NeispravnaKonfiguracija ex) {
             Logger.getLogger(SlusacAplikacije.class.getName()).log(Level.SEVERE, null, ex);
         }
-        sinkronizirajPodatkeUtabliciSWebServisom();
+        
         kd = new KomunikacijskaDretva();
         kd.start();
         md = new MeteoDretva();
         md.start();
+        sd = new SinkronizacijskaDretva();
+        sd.start();
+        
 
     }
 
@@ -46,6 +51,12 @@ public class SlusacAplikacije implements ServletContextListener {
 
         kd.interrupt();
         md.interrupt();
+        sd.interrupt();
+        try {
+            Thread.sleep(1200);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(SlusacAplikacije.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
@@ -61,78 +72,7 @@ public class SlusacAplikacije implements ServletContextListener {
         sc.setAttribute("Konfiguracija", konfiguracija);
     }
 
-    private void sinkronizirajPodatkeUtabliciSWebServisom() {
-        TablicaParkiraliste tp = new TablicaParkiraliste();
-        java.util.List<org.foi.nwtis.ivicelig.ws.klijenti.Parkiraliste> parkiralista = dajSvaParkiralistaGrupe("ivicelig", "656989");
-        List<org.foi.nwtis.ivicelig.web.podaci.Parkiraliste> parkiralistaBaze = tp.getAllRecords();
-        if (parkiralistaBaze.isEmpty()) {
-            for (Parkiraliste parkiraliste : parkiralista) {
-                npraviObjektIUpišiUBazu(parkiraliste, tp);
-            }
-        } else {
-            //Update for
-            for (org.foi.nwtis.ivicelig.ws.klijenti.Parkiraliste parkiraliste : parkiralista) {
-                boolean postoji = false;
-                for (org.foi.nwtis.ivicelig.web.podaci.Parkiraliste parkiralisteBaze : parkiralistaBaze) {
-                    if (parkiralisteBaze.getId() == parkiraliste.getId()) {
-                        //TODO if postoji onda provjeri dali su isti ako nisu onda ga ažuiraj
-                        if((parkiralisteBaze.getAdresa().equals(parkiraliste.getAdresa())) &&
-                                (parkiralisteBaze.getAdresa().equals(parkiraliste.getAdresa()))&&
-                                (parkiralisteBaze.getNaziv().equals(parkiraliste.getNaziv()))&&
-                                (parkiralisteBaze.getAdresa().equals(parkiraliste.getAdresa()))&&
-                                (parkiralisteBaze.getGeoloc().getLatitude().equals(parkiraliste.getGeoloc().getLatitude()))&&
-                                (parkiralisteBaze.getGeoloc().getLongitude().equals(parkiraliste.getGeoloc().getLongitude()))){
-                            
-                            
-                        }else{
-                            tp.update(parkiraliste);
-                        }
-                        postoji = true;
-                        break;
-                    }
-                }
-                
-                
-                    
-                
-                if (!postoji) {
-                    npraviObjektIUpišiUBazu(parkiraliste, tp);
-                }
-            }
-            //Delete for
+    
 
-        }
-        for (org.foi.nwtis.ivicelig.web.podaci.Parkiraliste parkiralisteBaze : parkiralistaBaze) {
-            boolean postoji = false;
-            for (org.foi.nwtis.ivicelig.ws.klijenti.Parkiraliste parkiraliste : parkiralista) {
-                if (parkiralisteBaze.getId() == parkiraliste.getId()) {
-                    postoji = true;
-                    break;
-                }
-            }
-            if (!postoji) {
-                tp.deleteByID(parkiralisteBaze.getId());
-            }
-        }
-
-    }
-
-    private void npraviObjektIUpišiUBazu(Parkiraliste parkiraliste, TablicaParkiraliste tp) {
-        org.foi.nwtis.ivicelig.web.podaci.Parkiraliste bazaParkiraliste = new org.foi.nwtis.ivicelig.web.podaci.Parkiraliste();
-        bazaParkiraliste.setId(parkiraliste.getId());
-        bazaParkiraliste.setAdresa(parkiraliste.getAdresa());
-        bazaParkiraliste.setNaziv(parkiraliste.getNaziv());
-        Lokacija l = new Lokacija();
-        l.setLatitude(parkiraliste.getGeoloc().getLatitude());
-        l.setLongitude(parkiraliste.getGeoloc().getLongitude());
-        bazaParkiraliste.setGeoloc(l);
-        tp.insert(bazaParkiraliste);
-    }
-
-    private static java.util.List<org.foi.nwtis.ivicelig.ws.klijenti.Parkiraliste> dajSvaParkiralistaGrupe(java.lang.String korisnickoIme, java.lang.String korisnickaLozinka) {
-        org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service service = new org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service();
-        org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje port = service.getParkiranjePort();
-        return port.dajSvaParkiralistaGrupe(korisnickoIme, korisnickaLozinka);
-    }
-
+    
 }

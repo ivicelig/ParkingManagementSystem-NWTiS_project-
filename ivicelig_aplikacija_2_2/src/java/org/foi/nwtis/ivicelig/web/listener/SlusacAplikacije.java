@@ -25,15 +25,14 @@ import org.foi.nwtis.ivicelig.web.threads.MQTTdretva;
 public class SlusacAplikacije implements ServletContextListener {
 
     public static ServletContext sc;
-    public MQTTdretva mqtt;
+    
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         sc = sce.getServletContext();
         try {
             dohvatiIpostaviKonfiguraciju();
-            // MQTTdretva md = new  MQTTdretva();
-            //md.start();
+            
         } catch (NemaKonfiguracije | NeispravnaKonfiguracija ex) {
             Logger.getLogger(SlusacAplikacije.class.getName()).log(Level.SEVERE, null, ex);
         }

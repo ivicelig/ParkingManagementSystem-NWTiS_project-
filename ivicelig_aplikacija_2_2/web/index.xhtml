@@ -37,8 +37,12 @@
                     <h:inputSecret id="password" value="#{login.lozinka}"/>
                     <br />
                     <h:commandButton value="Login" type="submmit" action="#{login.login()}" />
+                    <br/>
+                    <h:commandLink value="Logout" action="#{login.logout()}"/>
                 </h:form>
-
+                <div>
+                    
+                </div>
             </ui:define>
 
         </ui:composition>

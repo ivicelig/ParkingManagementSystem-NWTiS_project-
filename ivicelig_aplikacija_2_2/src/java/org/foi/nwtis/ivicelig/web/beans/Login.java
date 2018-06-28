@@ -42,10 +42,18 @@ public class Login implements Serializable {
                     = (HttpSession) context.getExternalContext().getSession(true);
 
             session.setAttribute("user", korime);
-            
+            session.setAttribute("lozinka", lozinka);
 
         } 
 
+    }
+    public void logout(){
+        FacesContext context = FacesContext.getCurrentInstance();
+            HttpSession session
+                    = (HttpSession) context.getExternalContext().getSession(true);
+
+            session.removeAttribute("user");
+            session.removeAttribute("lozinka");
     }
 
     public String getKorime() {

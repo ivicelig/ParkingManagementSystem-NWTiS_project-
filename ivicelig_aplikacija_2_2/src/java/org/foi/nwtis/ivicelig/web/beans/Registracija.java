@@ -12,6 +12,11 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.inject.Inject;
+import javax.jms.JMSConnectionFactory;
+import javax.jms.JMSContext;
+import javax.jms.Queue;
 import org.foi.nwtis.ivicelig.konfiguracije.Konfiguracija;
 import org.foi.nwtis.ivicelig.rest.json.CreateUserClass;
 import org.foi.nwtis.ivicelig.rest.json.KorisnikClass;
@@ -29,6 +34,7 @@ import org.foi.nwtis.ivicelig.web.listener.SlusacAplikacije;
 @SessionScoped
 public class Registracija implements Serializable {
 
+    
     private String korime = "";
     private String lozinka = "";
     private String ime = "";
@@ -250,7 +256,7 @@ public class Registracija implements Serializable {
         
         return "";
     }
-    
+
     
 
 }

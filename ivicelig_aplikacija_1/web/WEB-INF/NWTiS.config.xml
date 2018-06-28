@@ -31,7 +31,7 @@
 <entry key="skup.kodova.znakova">UTF-8</entry>
 <entry key="datoteka.evidencije.rada">NWTiS_ivicelig_evidencija_rada.bin</entry>
 <entry key="port">8000</entry>
-<entry key="interval.preuzimanje.podataka">10</entry>
+<entry key="interval.preuzimanje.podataka">60</entry>
 <entry key="maks.broj.zahtjeva.cekanje">2</entry>
 <entry key="admin.0.ivicelig">12345</entry>
 <entry key="maks.broj.radnih.dretvi">5</entry>

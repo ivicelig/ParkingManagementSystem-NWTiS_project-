@@ -24,20 +24,23 @@
 
             <ui:define name="content">
                  <h:form>
-                    <p:dataTable var="k" value="#{korisnici.korisnici}" rows="10"
+                     <p:dataTable var="k" value="#{dnevnik.dnevnik}" rows="10"
                                  paginator="true"
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  rowsPerPageTemplate="5,10,15">
-                        <p:column headerText="Korisničko ime:">
-                            <h:outputText value="#{k.korIme}" />
+                        <p:column headerText="Id:">
+                            <h:outputText value="#{k.id}" />
                         </p:column>
 
                         <p:column headerText="Ime">
-                            <h:outputText value="#{k.ime}" />
+                            <h:outputText value="#{k.naziv}" />
                         </p:column>
 
-                        <p:column headerText="Prezime">
-                            <h:outputText value="#{k.prezime}" />
+                        <p:column headerText="Prezime">k.
+                            <h:outputText value="#{k.opis}" />
+                        </p:column>
+                         <p:column headerText="Prezime">k.
+                            <h:outputText value="#{k.vrijeme}" />
                         </p:column>
 
                     

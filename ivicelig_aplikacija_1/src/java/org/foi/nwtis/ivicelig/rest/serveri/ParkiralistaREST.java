@@ -7,7 +7,9 @@ package org.foi.nwtis.ivicelig.rest.serveri;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -20,10 +22,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
+import org.foi.nwtis.ivicelig.web.baza.TablicaDnevnik;
+import org.foi.nwtis.ivicelig.web.baza.TablicaParkiraliste;
 import org.foi.nwtis.ivicelig.web.json.Odgovor;
 import org.foi.nwtis.ivicelig.web.json.ParkiralistaForJson;
 import org.foi.nwtis.ivicelig.web.json.Vehicle;
 import org.foi.nwtis.ivicelig.web.json.VehicleForJson;
+import org.foi.nwtis.ivicelig.web.podaci.Dnevnik;
+import org.foi.nwtis.ivicelig.web.podaci.Lokacija;
+import org.foi.nwtis.ivicelig.ws.klijenti.Parkiraliste;
 import org.foi.nwtis.ivicelig.ws.klijenti.Vozilo;
 
 /**
@@ -53,7 +60,7 @@ public class ParkiralistaREST {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getJson() {
-
+       
         ParkiralistaForJson pfj = new ParkiralistaForJson();
         java.util.List<org.foi.nwtis.ivicelig.ws.klijenti.Parkiraliste> parkiralistaGrupe = dajSvaParkiralistaGrupe("ivicelig", "656989");
         if (parkiralistaGrupe.isEmpty()) {
@@ -66,8 +73,17 @@ public class ParkiralistaREST {
                 odgovori.add(odgovor);
 
             }
+             TablicaDnevnik td = new TablicaDnevnik();
+                Dnevnik d = new Dnevnik();
+               d.setNaziv("REST");
+               d.setOpis("getJson");
+               SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        String sCertDate = sdf.format(new Date());
+               d.setVrijeme(sCertDate);
+            td.insert(d);
             pfj.setOdgovor(odgovori);
             pfj.setStatus("OK");
+            
 
         }
         Gson gson = new Gson();
@@ -115,6 +131,14 @@ public class ParkiralistaREST {
             if (odgovori.size() == 1) {
                 pfj.setOdgovor(odgovori);
                 pfj.setStatus("OK");
+                TablicaDnevnik td = new TablicaDnevnik();
+                Dnevnik d = new Dnevnik();
+               d.setNaziv("REST");
+               d.setOpis("getJson/id");
+               SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        String sCertDate = sdf.format(new Date());
+               d.setVrijeme(sCertDate);
+            td.insert(d);
             } else {
 
                 pfj.setStatus("ERR;");
@@ -139,7 +163,7 @@ public class ParkiralistaREST {
         if (vozilaGrupeID.isEmpty()) {
             vfj.setStatus("ERR;");
             vfj.setPoruka("NEMA VOZILA;");
-            
+
         } else {
             for (Vozilo vozilo : vozilaGrupeID) {
                 Vehicle vehicle = new Vehicle();
@@ -174,13 +198,26 @@ public class ParkiralistaREST {
         ParkiralistaForJson pfj = new ParkiralistaForJson();
         List<Odgovor> odgovori = new ArrayList<>();
         String json;
+
         if (!dodajNovoParkiralisteGrupi(korIme, lozinka, Integer.parseInt(id), naziv, adresa, kapacitet)) {
             pfj.setOdgovor(odgovori);
             pfj.setStatus("ERR");
             pfj.setPoruka("ID ZAUZET");
             json = gson.toJson(pfj, ParkiralistaForJson.class);
+            return json;
         }
+        java.util.List<org.foi.nwtis.ivicelig.ws.klijenti.Parkiraliste> parkiralistaGrupe = dajSvaParkiralistaGrupe("ivicelig", "656989");
+        for (Parkiraliste parkiraliste : parkiralistaGrupe) {
+            if (parkiraliste.getId() == Integer.parseInt(id)) {
+                TablicaParkiraliste tp = new TablicaParkiraliste();
+                napraviObjektIUpišiUBazu(parkiraliste, tp);
+                break;
 
+            }
+        }
+        java.util.List<org.foi.nwtis.ivicelig.ws.klijenti.Parkiraliste> temp = dajSvaParkiralistaGrupe("ivicelig", "656989");
+        
+        aktivirajParkiralisteGrupe("ivicelig", "656989", Integer.parseInt(id));
         pfj.setOdgovor(odgovori);
         pfj.setStatus("OK");
         json = gson.toJson(pfj, ParkiralistaForJson.class);
@@ -202,6 +239,10 @@ public class ParkiralistaREST {
         for (org.foi.nwtis.ivicelig.ws.klijenti.Parkiraliste parkiraliste : parkiralistaGrupe) {
             if (parkiraliste.getId() == Integer.parseInt(id)) {
                 postoji = true;
+                TablicaParkiraliste tp  = new TablicaParkiraliste();
+            
+        
+                napraviObjektIAzuirajUBazi(parkiraliste, tp);
                 break;
             }
         }
@@ -216,6 +257,9 @@ public class ParkiralistaREST {
             String adresa = jo.get("adresa").getAsString();
             int kapacitet = jo.get("kapacitet").getAsInt();
             dodajNovoParkiralisteGrupi(korIme, lozinka, Integer.parseInt(id), naziv, adresa, kapacitet);
+            //AZUIRAJ U BAZI
+            
+            
             pfj.setOdgovor(odgovori);
             pfj.setStatus("OK");
 
@@ -241,6 +285,8 @@ public class ParkiralistaREST {
         for (org.foi.nwtis.ivicelig.ws.klijenti.Parkiraliste parkiraliste : parkiralistaGrupe) {
             if (parkiraliste.getId() == Integer.parseInt(id)) {
                 postoji = true;
+                TablicaParkiraliste tp = new TablicaParkiraliste();
+                tp.deleteByID(Integer.parseInt(id));
                 break;
             }
         }
@@ -272,6 +318,7 @@ public class ParkiralistaREST {
         return port.dodajNovoParkiralisteGrupi(korisnickoIme, korisnickaLozinka, idParkiraliste, nazivParkiraliste, adresaParkiraliste, kapacitetParkiraliste);
     }
 
+    
     private static boolean obrisiParkiralisteGrupe(java.lang.String korisnickoIme, java.lang.String korisnickaLozinka, int idParkiraliste) {
         org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service service = new org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service();
         org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje port = service.getParkiranjePort();
@@ -282,6 +329,29 @@ public class ParkiralistaREST {
         org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service service = new org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service();
         org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje port = service.getParkiranjePort();
         return port.dajSvaVozilaParkiralistaGrupe(korisnickoIme, korisnickaLozinka, idParkiraliste);
+    }
+
+    private void napraviObjektIUpišiUBazu(Parkiraliste parkiraliste, TablicaParkiraliste tp) {
+        org.foi.nwtis.ivicelig.web.podaci.Parkiraliste bazaParkiraliste = new org.foi.nwtis.ivicelig.web.podaci.Parkiraliste();
+        bazaParkiraliste.setId(parkiraliste.getId());
+        bazaParkiraliste.setAdresa(parkiraliste.getAdresa());
+        bazaParkiraliste.setNaziv(parkiraliste.getNaziv());
+        Lokacija l = new Lokacija();
+        l.setLatitude(parkiraliste.getGeoloc().getLatitude());
+        l.setLongitude(parkiraliste.getGeoloc().getLongitude());
+        bazaParkiraliste.setGeoloc(l);
+        tp.insert(bazaParkiraliste);
+    }
+    private void napraviObjektIAzuirajUBazi(Parkiraliste parkiraliste, TablicaParkiraliste tp) {
+        
+       
+        tp.update(parkiraliste);
+    }
+
+    private static boolean aktivirajParkiralisteGrupe(java.lang.String korisnickoIme, java.lang.String korisnickaLozinka, int idParkiraliste) {
+        org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service service = new org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje_Service();
+        org.foi.nwtis.ivicelig.ws.klijenti.Parkiranje port = service.getParkiranjePort();
+        return port.aktivirajParkiralisteGrupe(korisnickoIme, korisnickaLozinka, idParkiraliste);
     }
 
 }

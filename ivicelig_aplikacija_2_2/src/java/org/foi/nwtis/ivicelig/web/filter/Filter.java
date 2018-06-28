@@ -32,7 +32,8 @@ import org.foi.nwtis.ivicelig.ejb.sb.DnevnikFacade;
  */
 @WebFilter(filterName = "FilterA", servletNames = {"Faces Servlet"})
 public class Filter implements javax.servlet.Filter {
-        private long startTime;
+
+    private long startTime;
     DnevnikFacade dnevnikFacade = lookupDnevnikFacadeBean();
 
     private static final boolean debug = true;
@@ -73,8 +74,9 @@ public class Filter implements javax.servlet.Filter {
 	}
          */
     }
- public String dodajParkiraliste(String ipAdresa, String korisnik, int status, int trajanje, String url, Date vrijeme) {
-         Dnevnik d = new Dnevnik();
+
+    public String dodajParkiraliste(String ipAdresa, String korisnik, int status, int trajanje, String url, Date vrijeme) {
+        Dnevnik d = new Dnevnik();
         d.setIpadresa(ipAdresa);
 
         d.setKorisnik(korisnik);
@@ -86,24 +88,34 @@ public class Filter implements javax.servlet.Filter {
 
         return "";
     }
+
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
-                long elapsed = System.currentTimeMillis() - startTime;
+        long elapsed = System.currentTimeMillis() - startTime;
         Integer i = (int) (long) elapsed;
-        
-            Date date = new Date();
 
+        Date date = new Date();
+        String korisnik="user";
+        HttpServletRequest req = (HttpServletRequest) request;
+        if (req.getSession().getAttribute("user") != null) {
+           
+        korisnik = req.getSession().getAttribute("user").toString();
+           
+            
+        }
+        
         try {
             if (request instanceof HttpServletRequest) {
                 String url = ((HttpServletRequest) request).getRequestURL().toString();
 
                 int status = ((HttpServletResponse) response).getStatus();
-                dodajParkiraliste(request.getLocalAddr(), "Korisnik", status, i, url, date);
+
+                dodajParkiraliste(request.getLocalAddr(), korisnik, status, i, url, date);
             } else {
-                dodajParkiraliste(request.getLocalAddr(), "Korisnik", 200, i, request.getLocalName(), date);
+                dodajParkiraliste(request.getLocalAddr(), korisnik, 200, i, request.getLocalName(), date);
             }
         } catch (Exception e) {
-            
+
         }
         if (debug) {
             log("Filter:DoAfterProcessing");
@@ -158,9 +170,8 @@ public class Filter implements javax.servlet.Filter {
         String url = ((HttpServletRequest) request).getRequestURL().toString();
         Throwable problem = null;
         if (!daliSesijaPostoji) {
-            if (url.endsWith("Posluzitelj.xhtml") || url.endsWith("Parkiralista.xhtml")) {
+            if (url.endsWith("Posluzitelj.xhtml") || url.endsWith("Parkiralista.xhtml")||url.endsWith("dnevnik.xhtml")) {
                 //Ako su requesti samo oni koji nesiju biti
-               
 
                 res.sendRedirect(loginURL);
             } else {

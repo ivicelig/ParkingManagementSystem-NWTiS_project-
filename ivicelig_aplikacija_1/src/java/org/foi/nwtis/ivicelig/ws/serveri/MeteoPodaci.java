@@ -6,6 +6,7 @@
 package org.foi.nwtis.ivicelig.ws.serveri;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,10 +17,12 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.foi.nwtis.ivicelig.konfiguracije.Konfiguracija;
 import org.foi.nwtis.ivicelig.rest.klijenti.OWMKlijent;
+import org.foi.nwtis.ivicelig.web.baza.TablicaDnevnik;
 import org.foi.nwtis.ivicelig.web.baza.TablicaKorisnici;
 import org.foi.nwtis.ivicelig.web.baza.TablicaMeteo;
 import org.foi.nwtis.ivicelig.web.baza.TablicaParkiraliste;
 import org.foi.nwtis.ivicelig.web.json.ResponseJSON;
+import org.foi.nwtis.ivicelig.web.podaci.Dnevnik;
 import org.foi.nwtis.ivicelig.web.podaci.Korisnik;
 import org.foi.nwtis.ivicelig.web.podaci.Parkiraliste;
 import org.foi.nwtis.ivicelig.web.slusaci.SlusacAplikacije;
@@ -46,6 +49,15 @@ public class MeteoPodaci {
         TablicaMeteo tm = new TablicaMeteo();
         if (provjeriDaliKorisnikPostoji(korime)) {
             if (provjeriKorisnickoImeIlozinku(korime, lozinka)) {
+                 TablicaDnevnik td = new TablicaDnevnik();
+                Dnevnik d = new Dnevnik();
+               d.setNaziv("SOAP");
+               d.setOpis("zadnjePreuzetiMeteoPodaci");
+               SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        String sCertDate = sdf.format(new Date());
+               d.setVrijeme(sCertDate);
+            td.insert(d);
+
                 return tm.getLastRecordByID(id);
             }
         }

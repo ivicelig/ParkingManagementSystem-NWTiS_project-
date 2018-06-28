@@ -44,35 +44,33 @@
                     <h:outputLabel id="stanje" value="#{posluzitelj.statusGrupe}" />
                 </h:form>
                     </div>
-                
+                <br/><br/>
                 <div>
                     <h:form>
                      <h:outputLabel  value="Pregled posluzitelja:" />
                      <br/>
 
-                    <h:commandButton  value="Registriraj grupu" action="#{posluzitelj.registrirajGrupu()}">
-                        <f:ajax execute="" render="stanje" />
+                     <h:commandButton  value="Pauziraj poslužitelj" action="#{posluzitelj.naredbaPauza()}">
+                        <f:ajax execute="" render="stanjePos" />
+                    </h:commandButton>
+                     <h:commandButton  value="Pokreni poslužitelj" action="#{posluzitelj.naredbaKreni()}">
+                        <f:ajax execute="" render="stanjePos" />
+                    </h:commandButton>
+                     <h:commandButton  value="Pasivno" action="#{posluzitelj.naredbaPasivno()}">
+                        <f:ajax execute="" render="stanjePos" />
+                    </h:commandButton>
+                     <h:commandButton  value="Aktivno" action="#{posluzitelj.naredbaAktivno()}">
+                        <f:ajax execute="" render="stanjePos" />
+                    </h:commandButton>
+                     <h:commandButton  value="Stani" action="#{posluzitelj.naredbaStani()}">
+                        <f:ajax execute="" render="stanjePos" />
                     </h:commandButton>
                     <br/>
 
-                    
-                    <h:commandButton  value="Naredba Aktiviraj grupu" action="#{posluzitelj.pokreniGrupu()}">
-                        <f:ajax execute="" render="stanje" />
-                    </h:commandButton>
-                    <br/>
+                 
 
-                    <h:commandButton  value="Naredba Pauza grupe" action="#{posluzitelj.blokirajGrupu()}">
-                        <f:ajax execute="" render="stanje" />
-                    </h:commandButton>
-                    <br/>
-
-                    <h:commandButton  value="Naredba deregistracija grupe" action="#{posluzitelj.deregistrirajGrupu()}">
-                        <f:ajax execute="" render="stanje" />
-                    </h:commandButton>
-                    <br/>
-
-                    <h:outputLabel  value="Stanje grupe: " />
-                    <h:outputLabel id="stanje" value="#{posluzitelj.statusGrupe}" />
+                    <h:outputLabel  value="Stanje poslužitelja: " />
+                    <h:outputLabel id="stanjePos" value="#{posluzitelj.stanjePosluzitelja}" />
                 </h:form>
                     </div>
             </ui:define>

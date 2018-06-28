@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./predlozak.xhtml">
+
+            <ui:define name="content">
+                <h:form>
+                    <p:dataTable var="k" value="#{dnevnik.zapisiDnevnika}" rows="#{registracija.brojStranica}"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+                        <p:column headerText="IP adresa:">
+                            <h:outputText value="#{k.ipadresa}" />
+                        </p:column>
+
+                        <p:column headerText="Korisničko ime:">
+                            <h:outputText value="#{k.korisnik}" />
+                        </p:column>
+
+                        <p:column headerText="Status:">
+                            <h:outputText value="#{k.status}" />
+                        </p:column>
+                        <p:column headerText="Trajanje:">
+                            <h:outputText value="#{k.trajanje}" />
+                        </p:column>
+                        <p:column headerText="URL:">
+                            <h:outputText value="#{k.url}" />
+                        </p:column>
+                        <p:column headerText="Vrijeme:">
+                            <h:outputText value="#{k.vrijeme}" />
+                        </p:column>
+
+                    
+
+                        <f:facet name="paginatorTopLeft">
+                            <p:commandButton type="button" icon="fa fa-sync" />
+                        </f:facet>
+
+                        <f:facet name="paginatorBottomRight">
+                            <p:commandButton type="button" icon="fa fa-cloud-upload" />
+                        </f:facet>
+                    </p:dataTable>
+                 </h:form>
+               
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -32,11 +34,13 @@ public class MqttPoruke implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
     @Column(name = "ID")
     private Integer id;
-    @Size(max = 500)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 500)
     @Column(name = "PORUKA")
     private String poruka;
 
@@ -45,6 +49,11 @@ public class MqttPoruke implements Serializable {
 
     public MqttPoruke(Integer id) {
         this.id = id;
+    }
+
+    public MqttPoruke(Integer id, String poruka) {
+        this.id = id;
+        this.poruka = poruka;
     }
 
     public Integer getId() {
